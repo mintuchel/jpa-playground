@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/jpatest
+    url: jdbc:h2:mem:jpajointestdb
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -11,5 +11,6 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
 logging.level:
   org.hibernate.SQL: debug

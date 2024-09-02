@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 // 다대일 단방향 테스트
 @DataJpaTest
+@ActiveProfiles("test")
 class ManyToOneTest {
 
     @Autowired
@@ -44,14 +46,10 @@ class ManyToOneTest {
         Assertions.assertThat(savedMember.getTeam()).isEqualTo(team);
     }
 
+    // 단방향일때는 실패하는 경우가 없다
     @Test
     @DisplayName("다대일 단방향 멤버 추가 실패")
     void addMemberToTeamFail(){
-        Team team = new Team("mancity");
-        teamRepository.save(team);
-
-        Member member = new Member("doku");
-        memberRepository.save(member);
 
     }
 }

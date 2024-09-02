@@ -10,11 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 // 일대다 단방향 테스트
 // 이걸 하면 update 쿼리가 세개가 나감!
 // 이 점 다시 찾아보기
 @DataJpaTest
+@ActiveProfiles("test")
 public class OneToManyTest {
     @Autowired
     @Qualifier("OTM_MemberRepository")
@@ -39,6 +41,7 @@ public class OneToManyTest {
         Assertions.assertThat(team.getMembers().contains(savedMember));
     }
 
+    // 단방향일때는 실패하는 경우가 없다
     @Test
     @DisplayName("일대다 단방향 멤버 추가 실패")
     public void addMemberToTeamFail(){
