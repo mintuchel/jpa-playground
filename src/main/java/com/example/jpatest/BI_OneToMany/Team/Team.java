@@ -1,10 +1,7 @@
 package com.example.jpatest.BI_OneToMany.Team;
 
 import com.example.jpatest.BI_OneToMany.Member.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -20,6 +17,7 @@ public class Team {
     private String teamName;
 
     @OneToMany
+    @JoinColumn(name="id")
     private List<Member> members = new ArrayList<>();
 
     public Team(String teamName){this.teamName = teamName;}
