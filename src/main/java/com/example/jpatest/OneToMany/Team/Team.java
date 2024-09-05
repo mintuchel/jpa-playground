@@ -23,7 +23,10 @@ public class Team {
     // @JoinColumn(name="team_id")를 @OneToMany와 함께 사용한 경우,
     // JPA는 외래 키가 Member 엔티티에 위치해야 하지만, 외래 키의 이름을 명시적으로 지정하겠다는 의미입니다.
     // 즉, @JoinColumn(name="team_id")는 Member 테이블에 있는 team_id 컬럼이 Team 테이블의 기본 키(일반적으로 id)를 참조하는 외래 키라는 것을 나타냅니다
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // 영속성 전이 적용 (부모에서 자식 객체로의 영속성 전이)
+    // members에 member를 저장해놓고 team을 저장하기만 하면
+    // members에 저장한 member 엔티티도 persist 가 자동으로 나감!
     @JoinColumn(name = "team_id")
     private List<Member> members = new ArrayList<>();
 
