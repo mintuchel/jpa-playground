@@ -4,16 +4,17 @@ import com.example.jpatest.ManyToOne.Member.Member;
 import com.example.jpatest.ManyToOne.Member.MemberRepository;
 import com.example.jpatest.ManyToOne.Team.Team;
 import com.example.jpatest.ManyToOne.Team.TeamRepository;
-import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // 다대일 단방향 테스트
 @DataJpaTest
@@ -29,7 +30,7 @@ class ManyToOneTest {
     MemberRepository memberRepository;
 
     @Test
-    @DisplayName("다대일 단방향 멤버 추가 성공")
+    @DisplayName("다대일 단방향 Member 추가 성공")
     void addMemberToTeamSuccess() {
         Team team = new Team("mancity");
         teamRepository.save(team);
@@ -39,17 +40,40 @@ class ManyToOneTest {
         member.setTeam(team);
         memberRepository.save(member);
 
-        Member savedMember = memberRepository.findById(member.getId()).orElseThrow(
-                () -> new IllegalArgumentException("Member not found")
-        );
+        // Member 가 잘 저장되었는지 확인
+        Member savedMember = memberRepository.findById(member.getId()).orElseThrow();
 
-        Assertions.assertThat(savedMember.getTeam()).isEqualTo(team);
+        // Team이 잘 저장되었는지 확인
+        Team savedTeam = teamRepository.findById(team.getId()).orElseThrow();
+
+        Assertions.assertThat(member.getTeam().getId()).isEqualTo(team.getId());
     }
 
-    // 단방향일때는 실패하는 경우가 없다
     @Test
-    @DisplayName("다대일 단방향 멤버 추가 실패")
+    @DisplayName("다대일 단방향 Member 추가 시 Team 조회 실패")
     void addMemberToTeamFail(){
+        Team team = new Team("mancity");
+        // 여기서는 teamRepository에 저장하지 않기
+        // teamRepository.save(team);
 
+        Member member = new Member("debruyne");
+        member.setTeam(team);
+        memberRepository.save(member);
+
+        // 저장된 Member 조회
+        Member savedMember = memberRepository.findById(member.getId()).orElseThrow();
+        // 저장된 Member 를 통해 Team 조회
+        Assertions.assertThat(member.getTeam().getId()).isEqualTo(team.getId());
+
+        // Team이 비영속상태이고 DB에 저장되지 않았어도 위에 두 개가 가능한 이유는
+        // Member에 Team에 대한 FK가 필요하므로 Team을 임시영속 상태로 만들어 외래키를 설정하기 때문
+        // 따라서 Member의 teamId 외래키가 자동으로 설정되고 객체를 저장하지 않더라도 teamId 가 Member 테이블에 정상 반영됨
+        // 즉 Member를 영속하려면 teamId가 필요하여 Team이 임시로 영속된 것이지
+        // 실제로 영속상태(EntityManager에 저장되거나)이거나 DB에 저장된게 아님!!
+        
+        // Exception 던지는게 맞으므로 던지는거 확인
+        assertThrows(NoSuchElementException.class, () -> {
+            teamRepository.findById(team.getId()).orElseThrow();
+        });
     }
 }
