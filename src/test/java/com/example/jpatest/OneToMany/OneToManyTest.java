@@ -26,16 +26,18 @@ public class OneToManyTest {
     TeamRepository teamRepository;
 
     @Test
-    @DisplayName("일대다 단방향 멤버 추가 성공")
+    @DisplayName("일대다 단방향 멤버 한명 추가 성공")
     public void addMemberToTeamSuccess(){
         Member member = new Member("gakpo");
 
         Team team = new Team("liverpool");
         team.addMember(member);
+
+        // cascade.ALL이라 team 저장할때 team의 members에 있는 member도 모두 persist 되어 영속성 컨텍스트에 들어가게 됨
         teamRepository.save(team);
 
         // @OneToMany(cascade = CascadeType.ALL) 로 해서 이게 통과가 되는거임
-        // 만약 cascade 명시 안했으면 member는 자동저장 안됨!
+        // 만약 Cascade 명시 안했으면 member는 자동저장 안됨!
         Member savedMember = memberRepository.findById(member.getId()).orElseThrow();
         Assertions.assertThat(savedMember.getId()).isEqualTo(member.getId());
 
