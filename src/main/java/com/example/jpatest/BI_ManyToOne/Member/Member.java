@@ -8,16 +8,15 @@ import lombok.Getter;
 @Getter
 public class Member {
     @Id
-    @GeneratedValue
-    @Column(name="member_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String nickName;
 
     // 보편적인 다대일에서 "다" 쪽을 주인으로 설정
-    // JoinColumn에 의해 Team의 PK가 Member 테이블에 teamId 라는 FK로 저장됨
-    @ManyToOne
-    @JoinColumn(name="teamId")
+    // JoinColumn에 의해 Team의 PK가 Member 테이블에 team_id 라는 FK로 저장됨
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="team_id")
     private Team team;
 
     public Member(String nickName){
