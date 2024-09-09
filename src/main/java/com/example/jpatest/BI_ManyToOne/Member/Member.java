@@ -3,12 +3,14 @@ package com.example.jpatest.BI_ManyToOne.Member;
 import com.example.jpatest.BI_ManyToOne.Team.Team;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity(name="BI_MTO_Member")
 @Getter
+@Setter
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private int id;
 
     private String nickName;
@@ -21,9 +23,5 @@ public class Member {
 
     public Member(String nickName){
         this.nickName = nickName;
-    }
-
-    public void setTeam(Team team){
-        this.team = team;
     }
 }
