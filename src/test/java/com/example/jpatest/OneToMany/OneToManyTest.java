@@ -65,4 +65,22 @@ public class OneToManyTest {
         Assertions.assertThat(teamRepository.findAll()).hasSize(0); // cascade에 의해 부모 삭제 시 자식들도 모두 자동 삭제됨
         Assertions.assertThat(memberRepository.findAll()).hasSize(0);
     }
+
+    @Test
+    @DisplayName("orphanRemoval로 고아 Member 자동 삭제")
+    public void orphanRemovalInTeamSuccess(){
+        // given
+        Member member = new Member("bruno");
+
+        Team team = new Team("manunited");
+        team.addMember(member);
+        teamRepository.save(team);
+
+        // when
+        team.removeMember(member);
+
+        // then
+        Assertions.assertThat(teamRepository.findAll()).hasSize(1); 
+        Assertions.assertThat(memberRepository.findAll()).hasSize(0); // orphanRemoval에 의해 부모와의 관계가 끊겨 고아로 판단되어 삭제됨
+    }
 }
