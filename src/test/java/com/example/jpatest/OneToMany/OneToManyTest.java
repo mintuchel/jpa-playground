@@ -26,8 +26,8 @@ public class OneToManyTest {
     TeamRepository teamRepository;
 
     @Test
-    @DisplayName("일대다 단방향 멤버 한명 추가 성공")
-    public void addMemberToTeamSuccess(){
+    @DisplayName("casacde로 Team 저장 시 Member 저장 성공")
+    public void cascadeInTeamSaveSuccess(){
         Member member = new Member("gakpo");
 
         Team team = new Team("liverpool");
@@ -38,17 +38,16 @@ public class OneToManyTest {
 
         // @OneToMany(cascade = CascadeType.ALL) 로 해서 이게 통과가 되는거임
         // 만약 Cascade 명시 안했으면 member는 자동저장 안됨!
-        Member savedMember = memberRepository.findById(member.getId()).orElseThrow();
-        Assertions.assertThat(savedMember.getId()).isEqualTo(member.getId());
+        Assertions.assertThat(memberRepository.findAll()).hasSize(1);
 
         // Team 쪽에서 member가 memberList에 저장되었는지 확인
-        Team savedTeam = teamRepository.findById(team.getId()).orElseThrow();
-        Assertions.assertThat(savedTeam.getMembers().contains(member)).isTrue();
+        Assertions.assertThat(team.getMembers().contains(member)).isTrue();
     }
 
     @Test
-    @DisplayName("일대다 단방향 멤버 여러명 추가 성공")
-    public void addMembersToTeamSuccess(){
+    @DisplayName("casacde로 Team 삭제 시 Member 삭제 성공")
+    public void cascadeInTeamRemoveSuccess(){
+        // given
         Member m1 = new Member("nunez");
         Member m2 = new Member("salah");
         Member m3 = new Member("diaz");
@@ -59,13 +58,11 @@ public class OneToManyTest {
         liverpool.addMember(m3);
         teamRepository.save(liverpool);
 
-        // @OneToMany(cascade = CascadeType.ALL) 로 해서 이게 통과가 되는거임
-        // 만약 cascade 명시 안했으면 member는 자동저장 안됨!
-        Member savedMember = memberRepository.findById(m2.getId()).orElseThrow();
-        Assertions.assertThat(savedMember.getId()).isEqualTo(m2.getId());
+        // when
+        teamRepository.delete(liverpool);
 
-        // Team 쪽에서 member가 memberList에 저장되었는지 확인
-        Team savedTeam = teamRepository.findById(liverpool.getId()).orElseThrow();
-        Assertions.assertThat(savedTeam.getMembers().size()).isEqualTo(3);
+        // then
+        Assertions.assertThat(teamRepository.findAll()).hasSize(0); // cascade에 의해 부모 삭제 시 자식들도 모두 자동 삭제됨
+        Assertions.assertThat(memberRepository.findAll()).hasSize(0);
     }
 }
