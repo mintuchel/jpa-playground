@@ -62,7 +62,7 @@ public class BI_ManyToOneTest {
     }
 
     @Test
-    @DisplayName("연관관계 편의 메서드 Member 추가 성공")
+    @DisplayName("연관관계 편의 메서드 사용 Member 추가 성공")
     void cascadeInTeamSuccess(){
         // given
         Member member = new Member("palmer");

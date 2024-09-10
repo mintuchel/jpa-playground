@@ -3,7 +3,6 @@ package com.example.jpatest.BI_ManyToOne.Team;
 import com.example.jpatest.BI_ManyToOne.Member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +27,15 @@ public class Team {
         this.teamName = teamName;
     }
 
+    // 연관관계는 동기화가 되지 않는다!
+
     // 연관관계 편의 메서드 작성
     public void addMember(Member member){
         members.add(member);
         member.setTeam(this);
     }
 
+    // 연관관계 편의 메서드 작성
     public void removeMember(Member member){
         members.remove(member);
         member.setTeam(null);
