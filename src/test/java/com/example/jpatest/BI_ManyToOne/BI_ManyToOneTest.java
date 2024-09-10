@@ -21,7 +21,6 @@ import java.util.List;
 
 // 영속성 컨텍스트가 변경을 감지하여 알아서 @Test 실행 도중에 실시간으로 영속성 컨텍스트 내 엔티티를 업데이트해줌
 // 그래서 update 나 findById 같이 다시 변경되었을 entity를 재조회 할 필요가 없다
-
 @DataJpaTest
 @ActiveProfiles("test")
 public class BI_ManyToOneTest {
@@ -33,26 +32,8 @@ public class BI_ManyToOneTest {
     @Qualifier("BI_MTO_TeamRepository")
     TeamRepository teamRepository;
 
-//    private int teamId;
-//    private int memberId;
-//
-//    @BeforeEach
-//    private void testSetUp(){
-//        Team team = new Team("real madrid");
-//
-//        Member member1 = new Member("vini");
-//        Member member2 = new Member("benzema");
-//        Member member3 = new Member("rodrygo");
-//
-//        team.addMember(member1);
-//        team.addMember(member2);
-//        team.addMember(member3);
-//
-//        teamRepository.save(team);
-//    }
-
     @Test
-    @DisplayName("cascade로 인한 영속성 전이로 자동 저장 확인")
+    @DisplayName("cascade 영속성 전이로 Member 자동 저장 확인")
     void cascadeSaveInTeamSuccess(){
         // given
         Team team = new Team("real madrid");
@@ -81,27 +62,7 @@ public class BI_ManyToOneTest {
     }
 
     @Test
-    @DisplayName("연관관계 편의 메서드 사용X 시 실패 확인")
-    void saveInMemberFail(){
-        // given
-        Team team = new Team("realmadrid");
-        teamRepository.save(team);
-
-        Member member = new Member("mbappe");
-        member.setTeam(team);
-        memberRepository.save(member);
-
-        // Member 쪽에서 Team이 team으로 저장되었는지 확인
-        // setTeam 으로 추가하여 통과해야하는게 맞음
-        Assertions.assertThat(member.getTeam().getId()).isEqualTo(team.getId());
-
-        // Team 쪽에서 Member 가 memberList 에 저장되었는지 확인
-        // 연관관계 편의 메서드로 연관관계를 설정하지 않았기 때문에 에러가 떠야함
-        Assertions.assertThat(team.getMembers().contains(member)).isFalse();
-    }
-
-    @Test
-    @DisplayName("다대일 양방향 멤버 추가 성공 (연관관계 편의 메서드로 추가)")
+    @DisplayName("연관관계 편의 메서드 Member 추가 성공")
     void cascadeInTeamSuccess(){
         // given
         Member member = new Member("palmer");
@@ -119,7 +80,27 @@ public class BI_ManyToOneTest {
     }
 
     @Test
-    @DisplayName("CasacdeType.ALL의 REMOVE 속성 사용 - 부모 엔티티(Team) 삭제 시 자녀 엔티티(Member) 자동 삭제")
+    @DisplayName("연관관계 편의 메서드 사용X Member 추가 실패")
+    void saveInMemberFail(){
+        // given
+        Team team = new Team("realmadrid");
+        teamRepository.save(team);
+
+        Member member = new Member("mbappe");
+        member.setTeam(team);
+        memberRepository.save(member);
+
+        // Member 쪽에서 Team이 team으로 저장되었는지 확인
+        // setTeam 으로 추가하여 통과해야하는게 맞음
+        Assertions.assertThat(member.getTeam().getId()).isEqualTo(team.getId());
+
+        // Team 쪽에서 Member 가 memberList 에 저장되었는지 확인
+        // 연관관계 편의 메서드로 연관관계를 설정하지 않았기 때문에 에러가 떠야함
+        Assertions.assertThat(team.getMembers().contains(member)).isFalse();
+    }
+    
+    @Test
+    @DisplayName("cascade의 remove 속성 사용 - Team 삭제 시 연관된 Member 자동 삭제")
     void casacadeInTeamRemoveSuccess(){
         // given
         Team team = new Team("arsenal");
@@ -167,5 +148,29 @@ public class BI_ManyToOneTest {
         // Assertions.assertThat(members).hasSize(0)은 fail이 남
         // Assertions.assertThat(members).hasSize(1)로 해야지 통과가 됨
         // 왜냐하면 orphanRemoval = false 면 관계가 끊어져서 고아가 된 member라고 해당 엔티티를 자동 삭제해주지는 않기 때문
+    }
+
+    @Test
+    @DisplayName("Member의 Team 연관관계 교체 성공")
+    void changeMemberTeamSuccess(){
+        // given
+        Member member = new Member("mbappe");
+        Team team1 = new Team("psg");
+        Team team2 = new Team("real madrid");
+
+        team1.addMember(member);
+
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+
+        // when
+        team1.removeMember(member);
+        team2.addMember(member); // 이때 update 쿼리 하나 나감
+
+        // then
+        Assertions.assertThat(memberRepository.findAll()).hasSize(1);
+        Assertions.assertThat(member.getTeam().getId()).isEqualTo(team2.getId());
+        Assertions.assertThat(team1.getMembers()).hasSize(0);
+        Assertions.assertThat(team2.getMembers()).hasSize(1);
     }
 }

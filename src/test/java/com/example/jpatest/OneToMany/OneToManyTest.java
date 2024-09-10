@@ -28,18 +28,20 @@ public class OneToManyTest {
     @Test
     @DisplayName("casacde로 Team 저장 시 Member 저장 성공")
     public void cascadeInTeamSaveSuccess(){
+        // given
         Member member = new Member("gakpo");
 
         Team team = new Team("liverpool");
         team.addMember(member);
 
-        // cascade.ALL이라 team 저장할때 team의 members에 있는 member도 모두 persist 되어 영속성 컨텍스트에 들어가게 됨
+        // when
+        // cascadeType.ALL로 team 저장할때 연관된 member도 모두 persist 되어 영속성 컨텍스트에 들어가게 됨
         teamRepository.save(team);
 
+        // then
         // @OneToMany(cascade = CascadeType.ALL) 로 해서 이게 통과가 되는거임
         // 만약 Cascade 명시 안했으면 member는 자동저장 안됨!
         Assertions.assertThat(memberRepository.findAll()).hasSize(1);
-
         // Team 쪽에서 member가 memberList에 저장되었는지 확인
         Assertions.assertThat(team.getMembers().contains(member)).isTrue();
     }
