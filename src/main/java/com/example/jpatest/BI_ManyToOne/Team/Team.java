@@ -18,8 +18,8 @@ public class Team {
     private String teamName;
 
     // mappedBy 에는 주인 엔티티 변수명. DB 칼럼명이 아님!!
-    // FetchType.LAZY 로 실제로 참조하기 전에는 프록시 객체로 구성
-    // CascadeType.ALL 로 부모인 Team entity에 변화가 일어나면 Member에도 변화를 적용함
+    // FetchType.LAZY : 실제로 참조하기 전에는 프록시 객체로 구성
+    // CascadeType.ALL : 부모인 Team entity에 영속성 변화가 일어나면 Member에도 영속성 전이를 함
     @OneToMany(mappedBy="team", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Member> members = new ArrayList<>();
 
@@ -31,5 +31,10 @@ public class Team {
     public void addMember(Member member){
         members.add(member);
         member.setTeam(this);
+    }
+
+    public void removeMember(Member member){
+        members.remove(member);
+        member.setTeam(null);
     }
 }
