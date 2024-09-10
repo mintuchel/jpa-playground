@@ -141,4 +141,31 @@ public class BI_ManyToOneTest {
         Assertions.assertThat(teamRepository.findAll()).hasSize(0);
         Assertions.assertThat(memberRepository.findAll()).hasSize(0);
     }
+
+    @Test
+    @DisplayName("orphanRemoval = true 속성에 의해 부모와의 관계 제거 시 자식 엔티티 삭제 성공")
+    void orphanRemovalInTeamSuccess(){
+        // given
+        Member member = new Member("henry");
+
+        Team team = new Team("arsenal");
+        team.addMember(member);
+
+        teamRepository.save(team); // cascade 에 의해 team 에 속해있는 member 까지 모두 저장됨
+
+        // when
+        // 연관관계 편의 메서드로 삭제 -> 두쪽에 모두 적용
+        team.removeMember(member);
+
+        // then
+        List<Member> members = memberRepository.findAll();
+
+        Assertions.assertThat(team.getMembers().isEmpty());
+        Assertions.assertThat(members).hasSize(0); // member 엔티티에 delete 쿼리 나가는거 로그 찍으면 확인가능
+
+        // 만약 Team에서 orphanRemoval = false로 되어있었다면
+        // Assertions.assertThat(members).hasSize(0)은 fail이 남
+        // Assertions.assertThat(members).hasSize(1)로 해야지 통과가 됨
+        // 왜냐하면 orphanRemoval = false 면 관계가 끊어져서 고아가 된 member라고 해당 엔티티를 자동 삭제해주지는 않기 때문
+    }
 }
