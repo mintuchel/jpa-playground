@@ -2,6 +2,7 @@ package com.example.jpatest.OneToMany.Team;
 
 import com.example.jpatest.OneToMany.Member.Member;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -9,12 +10,13 @@ import java.util.List;
 
 @Entity(name="OneToMany_Team")
 @Getter
+@Builder
 public class Team {
     @Id @GeneratedValue
     @Column(name="team_id")
     private int id;
 
-    private String teamName;
+    private String name;
 
     // 여기가 가장 헷갈리는 곳
     // OneToMany에서 보편적으로는 외래키가 존재하는 Many쪽을 주인으로 하지만 만약 One쪽을 주인으로 한다면?
@@ -27,11 +29,8 @@ public class Team {
     // members에 member를 저장해놓고 team을 저장하기만 하면
     // members에 저장한 member 엔티티도 persist 가 자동으로 나감!
     @JoinColumn(name = "team_id")
+    @Builder.Default
     private List<Member> members = new ArrayList<>();
-
-    public Team(final String teamName){
-        this.teamName = teamName;
-    }
 
     public void addMember(Member member){
         members.add(member);

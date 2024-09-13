@@ -36,11 +36,21 @@ public class BI_ManyToOneTest {
     @DisplayName("cascade 영속성 전이로 Member 자동 저장 확인")
     void cascadeSaveInTeamSuccess(){
         // given
-        Team team = new Team("real madrid");
+        Team team = Team.builder()
+                .name("real madrid")
+                .build();
 
-        Member member1 = new Member("vini");
-        Member member2 = new Member("benzema");
-        Member member3 = new Member("rodrygo");
+        Member member1 = Member.builder()
+                .name("vini")
+                .build();
+
+        Member member2 = Member.builder()
+                .name("benzema")
+                .build();
+
+        Member member3 = Member.builder()
+                .name("rodrygo")
+                .build();
 
         // when
         team.addMember(member1);
@@ -65,8 +75,13 @@ public class BI_ManyToOneTest {
     @DisplayName("연관관계 편의 메서드 사용 Member 추가 성공")
     void cascadeInTeamSuccess(){
         // given
-        Member member = new Member("palmer");
-        Team team = new Team("chelsea");
+        Member member = Member.builder()
+                .name("palmer")
+                .build();
+
+        Team team = Team.builder()
+                .name("chelsea")
+                .build();
 
         // when
         team.addMember(member);
@@ -83,10 +98,16 @@ public class BI_ManyToOneTest {
     @DisplayName("연관관계 편의 메서드 사용X Member 추가 실패")
     void saveInMemberFail(){
         // given
-        Team team = new Team("realmadrid");
+        Team team = Team.builder()
+                .name("real madrid")
+                .build();
+
         teamRepository.save(team);
 
-        Member member = new Member("mbappe");
+        Member member = Member.builder()
+                .name("mbappe")
+                .build();
+
         member.setTeam(team);
         memberRepository.save(member);
 
@@ -103,10 +124,17 @@ public class BI_ManyToOneTest {
     @DisplayName("cascade의 remove 속성 사용 - Team 삭제 시 연관된 Member 자동 삭제")
     void casacadeInTeamRemoveSuccess(){
         // given
-        Team team = new Team("arsenal");
+        Team team = Team.builder()
+                .name("arsenal")
+                .build();
 
-        Member member1 = new Member("henry");
-        Member member2 = new Member("pirez");
+        Member member1 = Member.builder()
+                .name("henry")
+                .build();
+
+        Member member2 = Member.builder()
+                .name("pirez")
+                .build();
 
         team.addMember(member1);
         team.addMember(member2);
@@ -127,9 +155,14 @@ public class BI_ManyToOneTest {
     @DisplayName("orphanRemoval = true 속성에 의해 부모와의 관계 제거 시 자식 엔티티 삭제 성공")
     void orphanRemovalInTeamSuccess(){
         // given
-        Member member = new Member("henry");
+        Member member = Member.builder()
+                .name("henry")
+                .build();
 
-        Team team = new Team("arsenal");
+        Team team = Team.builder()
+                .name("arsenal")
+                .build();
+
         team.addMember(member);
 
         teamRepository.save(team); // cascade 에 의해 team 에 속해있는 member 까지 모두 저장됨
@@ -154,9 +187,17 @@ public class BI_ManyToOneTest {
     @DisplayName("Member의 Team 연관관계 교체 성공")
     void changeMemberTeamSuccess(){
         // given
-        Member member = new Member("mbappe");
-        Team team1 = new Team("psg");
-        Team team2 = new Team("real madrid");
+        Member member = Member.builder()
+                .name("mbappe")
+                .build();
+
+        Team team1 = Team.builder()
+                .name("psg")
+                .build();
+
+        Team team2 = Team.builder()
+                .name("real madrid")
+                .build();
 
         team1.addMember(member);
 

@@ -29,9 +29,14 @@ public class OneToManyTest {
     @DisplayName("casacde로 Team 저장 시 Member 저장 성공")
     public void cascadeInTeamSaveSuccess(){
         // given
-        Member member = new Member("gakpo");
+        Member member = Member.builder()
+                .name("gakpo")
+                .build();
 
-        Team team = new Team("liverpool");
+        Team team = Team.builder()
+                .name("liverpool")
+                .build();
+
         team.addMember(member);
 
         // when
@@ -50,11 +55,21 @@ public class OneToManyTest {
     @DisplayName("casacde로 Team 삭제 시 Member 삭제 성공")
     public void cascadeInTeamRemoveSuccess(){
         // given
-        Member m1 = new Member("nunez");
-        Member m2 = new Member("salah");
-        Member m3 = new Member("diaz");
+        Member m1 = Member.builder()
+                .name("nunez")
+                .build();
 
-        Team liverpool = new Team("liverpool");
+        Member m2 = Member.builder()
+                .name("salah")
+                .build();
+        Member m3 = Member.builder()
+                .name("diaz")
+                .build();
+
+        Team liverpool = Team.builder()
+                .name("liverpool")
+                .build();
+
         liverpool.addMember(m1);
         liverpool.addMember(m2);
         liverpool.addMember(m3);
@@ -72,9 +87,17 @@ public class OneToManyTest {
     @DisplayName("orphanRemoval로 고아 Member 자동 삭제")
     public void orphanRemovalInTeamSuccess(){
         // given
-        Member member = new Member("bruno");
+        Member member = Member.builder()
+                .name("bruno")
+                .build();
 
-        Team team = new Team("manunited");
+        Team team = Team.builder()
+                .name("manu")
+                .build();
+
+        // NoArgs AllArgs 일때 확인하기
+        // Member m1 = new Member();
+        
         team.addMember(member);
         teamRepository.save(team);
 

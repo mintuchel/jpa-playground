@@ -32,10 +32,16 @@ class ManyToOneTest {
     @Test
     @DisplayName("다대일 단방향 Member 추가 성공")
     void addMemberToTeamSuccess() {
-        Team team = new Team("mancity");
+        Team team = Team.builder()
+                .name("mancity")
+                .build();
+
         teamRepository.save(team);
 
-        Member member = new Member("gundogan");
+        Member member = Member.builder()
+                .name("gundogan")
+                .build();
+
         // 연관관계의 주인이 Many 쪽이므로 Many 쪽에 One 추가
         member.setTeam(team);
         memberRepository.save(member);
@@ -46,11 +52,16 @@ class ManyToOneTest {
     @Test
     @DisplayName("다대일 단방향 Member 추가 시 Team 조회 실패")
     void addMemberToTeamFail(){
-        Team team = new Team("mancity");
+        Team team = Team.builder()
+                .name("mancity")
+                .build();
         // 여기서는 teamRepository에 저장하지 않기
         // teamRepository.save(team);
 
-        Member member = new Member("debruyne");
+        Member member = Member.builder()
+                .name("debruyne")
+                .build();
+
         member.setTeam(team);
         memberRepository.save(member);
         

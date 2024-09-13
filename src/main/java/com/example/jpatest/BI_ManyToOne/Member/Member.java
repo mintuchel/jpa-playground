@@ -2,18 +2,18 @@ package com.example.jpatest.BI_ManyToOne.Member;
 
 import com.example.jpatest.BI_ManyToOne.Team.Team;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity(name="BI_MTO_Member")
 @Getter
-@Setter
+@Builder
 public class Member {
     @Id
     @GeneratedValue
     private int id;
 
-    private String nickName;
+    private String name;
 
     // 보편적인 다대일에서 many쪽을 주인으로 설정
     // JoinColumn에 의해 Team의 PK가 Member 테이블에 team_id 라는 FK로 저장됨
@@ -22,7 +22,7 @@ public class Member {
     @JoinColumn(name="team_id")
     private Team team;
 
-    public Member(String nickName){
-        this.nickName = nickName;
+    public void setTeam(Team team){
+        this.team = team;
     }
 }
