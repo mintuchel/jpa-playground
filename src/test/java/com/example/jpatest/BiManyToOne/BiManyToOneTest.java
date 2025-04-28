@@ -1,9 +1,9 @@
-package com.example.jpatest.BI_ManyToOne;
+package com.example.jpatest.BiManyToOne;
 
-import com.example.jpatest.BI_ManyToOne.Member.Member;
-import com.example.jpatest.BI_ManyToOne.Member.MemberRepository;
-import com.example.jpatest.BI_ManyToOne.Team.Team;
-import com.example.jpatest.BI_ManyToOne.Team.TeamRepository;
+import com.example.jpatest.BiManyToOne.Member.Member;
+import com.example.jpatest.BiManyToOne.Member.MemberRepository;
+import com.example.jpatest.BiManyToOne.Team.Team;
+import com.example.jpatest.BiManyToOne.Team.TeamRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,13 +25,13 @@ import java.util.List;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class BI_ManyToOneTest {
+public class BiManyToOneTest {
     @Autowired
-    @Qualifier("BI_MTO_MemberRepository")
+    @Qualifier("BiMTO_MemberRepository")
     MemberRepository memberRepository;
 
     @Autowired
-    @Qualifier("BI_MTO_TeamRepository")
+    @Qualifier("BiMTO_TeamRepository")
     TeamRepository teamRepository;
 
     @Test
