@@ -1,19 +1,20 @@
-package com.example.jpatest.BI_ManyToOne.Team;
+package com.example.jpatest.BiManyToOne.Team;
 
-import com.example.jpatest.BI_ManyToOne.Member.Member;
+import com.example.jpatest.BiManyToOne.Member.Member;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name="BI_MTO_Team")
+@Entity(name="BiMTO_Team")
 @Getter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Team {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
@@ -26,7 +27,9 @@ public class Team {
     @Builder.Default
     private List<Member> members = new ArrayList<>();
 
-    // 연관관계는 동기화가 되지 않는다!
+    /**
+     * 연관관계는 동기화가 되지 않는다!
+     */
 
     // 연관관계 편의 메서드 작성
     public void addMember(Member member){

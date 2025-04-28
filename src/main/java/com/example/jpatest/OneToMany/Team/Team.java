@@ -2,8 +2,7 @@ package com.example.jpatest.OneToMany.Team;
 
 import com.example.jpatest.OneToMany.Member.Member;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,8 @@ import java.util.List;
 @Entity(name="OneToMany_Team")
 @Getter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Team {
     @Id @GeneratedValue
     @Column(name="team_id")

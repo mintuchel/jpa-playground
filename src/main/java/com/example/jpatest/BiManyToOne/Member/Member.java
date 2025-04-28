@@ -1,16 +1,17 @@
-package com.example.jpatest.BI_ManyToOne.Member;
+package com.example.jpatest.BiManyToOne.Member;
 
-import com.example.jpatest.BI_ManyToOne.Team.Team;
+import com.example.jpatest.BiManyToOne.Team.Team;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Entity(name="BI_MTO_Member")
+@Entity(name="BiMTO_Member")
 @Getter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
@@ -22,6 +23,7 @@ public class Member {
     @JoinColumn(name="team_id")
     private Team team;
 
+    // 연관관계 편의 메서드 때문에 필요
     public void setTeam(Team team){
         this.team = team;
     }
