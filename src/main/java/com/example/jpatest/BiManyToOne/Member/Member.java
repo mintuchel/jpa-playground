@@ -23,8 +23,9 @@ public class Member {
     @JoinColumn(name="team_id")
     private Team team;
 
-    // 연관관계 편의 메서드 때문에 필요
-    public void setTeam(Team team){
+    // 주인이 아닌 Team 쪽에 연관관계 편의 메서드가 존재
+    // 해당 편의메서드에서 setTeam 함수를 사용해서 이 함수가 여기 필요한거임!
+    public void setTeam(Team team) {
         this.team = team;
     }
 }

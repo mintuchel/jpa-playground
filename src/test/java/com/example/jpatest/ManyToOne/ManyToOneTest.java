@@ -40,11 +40,12 @@ class ManyToOneTest {
 
         teamRepository.save(team);
 
+        // 연관관계의 주인이 Many 쪽이므로 Many 쪽에 One 추가
         Member member = Member.builder()
+                // .team(team)
                 .name("gundogan")
                 .build();
 
-        // 연관관계의 주인이 Many 쪽이므로 Many 쪽에 One 추가
         member.setTeam(team);
         memberRepository.save(member);
 
@@ -57,6 +58,7 @@ class ManyToOneTest {
         Team team = Team.builder()
                 .name("mancity")
                 .build();
+
         // 여기서는 teamRepository에 저장하지 않기
         // teamRepository.save(team);
 

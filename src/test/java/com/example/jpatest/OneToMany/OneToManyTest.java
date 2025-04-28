@@ -28,7 +28,7 @@ public class OneToManyTest {
     TeamRepository teamRepository;
 
     @Test
-    @DisplayName("casacde로 Team 저장 시 Member 저장 성공")
+    @DisplayName("Cascade 로 Team 저장 시 Member 저장 성공")
     public void cascadeInTeamSaveSuccess(){
         // given
         Member member = Member.builder()
@@ -54,7 +54,7 @@ public class OneToManyTest {
     }
 
     @Test
-    @DisplayName("casacde로 Team 삭제 시 Member 삭제 성공")
+    @DisplayName("Cascade 로 Team 삭제 시 Member 삭제 성공")
     public void cascadeInTeamRemoveSuccess(){
         // given
         Member m1 = Member.builder()
@@ -86,7 +86,7 @@ public class OneToManyTest {
     }
 
     @Test
-    @DisplayName("orphanRemoval로 고아 Member 자동 삭제")
+    @DisplayName("orphanRemoval 로 고아 Member 자동 삭제")
     public void orphanRemovalInTeamSuccess(){
         // given
         Member member = Member.builder()

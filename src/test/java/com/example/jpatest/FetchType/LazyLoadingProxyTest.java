@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class LoadingTypeTest {
+public class LazyLoadingProxyTest {
     @Autowired
     @Qualifier("BiMTO_MemberRepository")
     MemberRepository memberRepository;
