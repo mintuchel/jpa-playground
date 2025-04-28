@@ -1,6 +1,4 @@
 spring:
-  jwt:
-    secret: colepalmerpedronetononimaduekemoisescaicedo
   datasource:
     url: jdbc:mysql://localhost:3306/jpajointest?serverTimezone=UTC&characterEncoding=UTF-8
     username: root

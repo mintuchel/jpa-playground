@@ -1,6 +1,4 @@
 spring:
-  jwt:
-    secret: colepalmerpedronetononimaduekemoisescaicedo
   datasource:
     url: jdbc:mysql://localhost:3306/jpajointest?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
@@ -9,7 +7,7 @@ spring:
   jpa:
     hibernate:
       # ddl-auto: update # 기존 더미 데이터 삭제되지 않게
-      ddl-auto: create # 매번 db 초기화하고 시작
+      ddl-auto: update # 매번 db 초기화하고 시작
     properties:
       hibernate:
         show_sql: true
