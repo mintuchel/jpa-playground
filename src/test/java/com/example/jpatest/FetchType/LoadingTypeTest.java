@@ -58,6 +58,7 @@ public class LoadingTypeTest {
         // Lazy Loading 으로 인한 프록시 객체 확인 (초기화 전)
         System.out.println("현재 Member의 Team 프록시 객체 확인");
         System.out.println(foundMember.getTeam().getClass());
+
         System.out.println("===============================");
 
         System.out.println("foundMember.getTeam().getName() 호출 후");

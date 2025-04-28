@@ -29,7 +29,7 @@ public class EagerLoadingTest {
     EntityManager em;
 
     @Test
-    @DisplayName("지연로딩 프록시 객체 확인")
+    @DisplayName("즉시로딩 프록시 객체가 아닌 실제 객체 타입 확인")
     public void checkProxyType() {
         Team team = Team.builder()
                 .name("real madrid")
@@ -52,12 +52,13 @@ public class EagerLoadingTest {
         em.clear();
 
         // em.find 호출
-        // em.find 는 즉시로딩으로 호출되지만 FetchType.LAZY 로 선언된 필드들은 지연로딩으로 가져옴
+        // em.find 는 즉시로딩으로 호출되고 연관관계인 객체들도 지금은 FetchType.EAGER 로 선언되었으므로 모두 즉시로딩되어 가져옴
         Member foundMember = memberRepository.findById(member.getId()).orElseThrow();
 
         // Eager Loading 으로 인해 Member 를 조회할때 연관관계가 있는 객체도 프록시 객체가 아닌 실제 객체로 조회가 됨!
         System.out.println("현재 Member의 Team 객체 클래스 확인 - 즉시로딩이므로 프록시 객체가 아닌 실제 객체 클래스 조회가 됨");
         System.out.println(foundMember.getTeam().getClass());
+
         System.out.println("===============================");
 
         System.out.println("foundMember.getTeam().getName() 호출 후");
