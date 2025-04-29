@@ -42,11 +42,10 @@ class ManyToOneTest {
 
         // 연관관계의 주인이 Many 쪽이므로 Many 쪽에 One 추가
         Member member = Member.builder()
-                // .team(team)
+                .team(team)
                 .name("gundogan")
                 .build();
 
-        member.setTeam(team);
         memberRepository.save(member);
 
         Assertions.assertThat(member.getTeam().getId()).isEqualTo(team.getId());
@@ -63,10 +62,10 @@ class ManyToOneTest {
         // teamRepository.save(team);
 
         Member member = Member.builder()
+                .team(team)
                 .name("debruyne")
                 .build();
 
-        member.setTeam(team);
         memberRepository.save(member);
         
         // 저장된 Member 를 통해 Team 조회
