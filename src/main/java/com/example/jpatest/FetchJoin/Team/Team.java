@@ -27,4 +27,14 @@ public class Team {
     @OneToMany(mappedBy="team", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Member> members = new ArrayList<>();
+
+    public void addMember(Member member) {
+        members.add(member);
+        member.setTeam(this);
+    }
+
+    public void removeMember(Member member) {
+        members.remove(member);
+        member.setTeam(null);
+    }
 }
