@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository("FJ_MemberRepository")
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    @Query("select m from FJ_Member m left join m.team")
+    @Query("select m from FJ_Member m join m.team")
     List<Member> findMemberByTeamOuterJoin();
 
     @Query("select m from FJ_Member m left join fetch m.team")
